@@ -1,0 +1,297 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import InfoCard from '../components/InfoCard.astro';
+
+import { SERVER } from '../config/server';
+---
+
+<BaseLayout title={SERVER.name}>
+  <Navbar />
+  
+  <header class="hero">
+    <div class="overlay"></div>
+    <div class="container hero-content">
+      <div class="logo-container">
+        <div class="logo-icon">
+          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <h1 class="brand-name">
+          <span class="text-ender">ENDER</span><span class="text-games">GAMES</span>
+        </h1>
+      </div>
+
+      <p class="tagline">Juega ahora:</p>
+      
+      <div class="game-carousel">
+        <h2 id="carousel-text" class="hero-title">{SERVER.games[0]}</h2>
+      </div>
+      
+      <a 
+        href={`minecraft://?addExternalServer=${SERVER.name}|${SERVER.ip}:${SERVER.port}`} 
+        class="cta-button"
+      >
+        Abrir Minecraft <span>&rarr;</span>
+      </a>
+      
+      <p class="server-ip">
+        Y conéctate a
+        <strong
+          class="copy-ip"
+          data-copy={SERVER.ip}
+          data-toast="¡IP copiada al portapapeles!"
+        >
+          {SERVER.ip}
+        </strong>
+        ({SERVER.port})
+      </p>
+    </div>
+  </header>
+
+  <section class="welcome-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>{`Bienvenido a ${SERVER.name}`}</h2>
+        <p>Un servidor de Minecraft (Bedrock Edition), con minijuegos divertidos.</p>
+      </div>
+
+      <div class="grid-cards">
+        <InfoCard 
+          title="Tienda"
+          description="Apoya al desarrollo del servidor adquiriendo rangos obteniendo beneficios exclusivos."
+          action="Ir a la Tienda"
+          toast-message="¡Por implementar!"
+          toast-type="error"
+        />
+
+        <InfoCard 
+          title="Votar"
+          description="¿Somos un gran servidor? ¡Vota ahora! Podrías desbloquear recompesas increíbles."
+          action="Votar Ahora"
+          toast-message="¡Por implementar!"
+          toast-type="error"
+        />
+        
+        <InfoCard 
+          title="Comunidad"
+          href={`${SERVER.discord}`}
+          description="Únete a nuestro servidor de Discord para charlar con otros jugadores, reportar bugs y enterarte de las últimas noticias."
+          action="Unirse a Discord"
+        />
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { SERVER } from '../config/server';
+
+    /** Carousel handler */
+
+    const titleElement = document.getElementById('carousel-text');
+    let currentIndex = 0;
+  
+    function updateGame() {
+      if (!titleElement) return;
+
+      titleElement.classList.add('exit-animation');
+
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % SERVER.games.length;
+        titleElement.innerText = SERVER.games[currentIndex];
+
+        titleElement.classList.remove('exit-animation');
+
+        titleElement.style.animation = 'none';
+        titleElement.offsetHeight; // Force reflow to restart animation
+        titleElement.style.animation = '';
+      }, 800); // Should match CSS fadeOut
+    }
+
+    setInterval(updateGame, 2500);
+  </script>
+</BaseLayout>
+
+<style>
+  /* Hero Styles */
+  .hero {
+    position: relative;
+    width: 100%;
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-image: url('/bg.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(16, 2, 29, 0.4) 0%, rgba(10, 10, 10, 0.9) 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 130px;
+    padding-bottom: 20px;
+  }
+
+  .logo-icon {
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px rgba(170, 0, 170, 0.5));
+  }
+
+  .brand-name {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .text-ender {
+    color: var(--ender-purple);
+    text-shadow: 0 0 15px rgba(170, 0, 170, 0.6);
+  }
+
+  .text-games {
+    color: var(--games-green); /* White typically looks cleaner next to purple, so may be worth changing */
+    text-shadow: 0 0 15px rgba(85, 255, 85, 0.6);
+  }
+
+  .tagline {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  }
+
+.game-carousel {
+    min-height: 1.5em; 
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible; 
+    width: 100%;
+    margin: 0 0 2rem 0;
+    position: relative;
+  }
+
+  .hero-title {
+    font-size: clamp(1.8rem, 8vw, 3.8rem); 
+    font-weight: 900;
+    margin: 0;
+    line-height: 1.1;
+    white-space: nowrap;
+
+    background: linear-gradient(to bottom, #ffffff 40%, #bbbbbb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+
+    padding: 0.1em 20px; 
+
+    display: block;
+    animation: slideIn 0.8s ease-out forwards;
+  }
+
+  .exit-animation {
+    animation: fadeOut 0.8s ease-in forwards !important;
+  }
+
+  .cta-button {
+    background-color: var(--ender-purple);
+    color: white;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    box-shadow: 0 4px 15px rgba(170, 0, 170, 0.4);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cta-button:hover {
+    background-color: var(--ender-purple-soft);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(170, 0, 170, 0.6);
+    opacity: 1;
+  }
+
+  .server-ip {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #ddd;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  }
+
+  .copy-ip {
+    color: #fff;
+    cursor: pointer;
+  }
+
+  /* Welcome Section Styles */
+  .welcome-section {
+    padding: 5rem 0;
+    background-color: var(--bg-dark);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .section-header p {
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+.grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+    gap: 2rem;
+    padding: 0 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+  }
+</style>

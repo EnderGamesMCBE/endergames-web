@@ -1,0 +1,46 @@
+:root {
+  /* Requested Colors */
+  --ender-purple: #aa00aa;
+  --ender-purple-soft: #c040c0;
+  --games-green: #55ff55;
+  --games-green-soft: #7dff7d;
+  
+  /* Layout Colors */
+  --bg-dark: #0a0a0a;
+  --bg-card: #151515;
+  --text-main: #ffffff;
+  --text-muted: #a0a0a0;
+  --navbar-height: 80px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  overflow-x: hidden; 
+  position: relative;
+}

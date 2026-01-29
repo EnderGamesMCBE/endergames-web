@@ -1,0 +1,20 @@
+---
+import "./toast.css";
+---
+
+<div id="toast-root"></div>
+
+<script>
+  import { initToast, bindToastTriggers } from "./toast";
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      initToast();
+      bindToastTriggers();
+    });
+  } else {
+    initToast();
+    bindToastTriggers();
+  }
+</script>
+
