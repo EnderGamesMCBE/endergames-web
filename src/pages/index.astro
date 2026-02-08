@@ -9,7 +9,7 @@ import { SERVER } from '../config/server';
 <BaseLayout title={SERVER.name}>
   <Navbar />
   
-  <header class="hero">
+  <header id="hero-dynamic-bg" class="hero">
     <div class="overlay"></div>
     <div class="container hero-content">
       <div class="logo-container">
@@ -110,6 +110,22 @@ import { SERVER } from '../config/server';
     }
 
     setInterval(updateGame, 2500);
+
+
+    /** Dynamic background image handler */
+
+    function setDynamicBackground() {
+      const heroElement = document.getElementById('hero-dynamic-bg');
+      if (!heroElement) return;
+
+      const hour = new Date().getHours();
+    
+      heroElement.style.backgroundImage = (hour >= 6 && hour < 18) 
+        ? "url('/bg-day.webp')" 
+        : "url('/bg-night.webp')";
+    }
+
+    setDynamicBackground();
   </script>
 </BaseLayout>
 
@@ -123,7 +139,6 @@ import { SERVER } from '../config/server';
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-image: url('/bg.png');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -132,7 +147,7 @@ import { SERVER } from '../config/server';
   .overlay {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, rgba(16, 2, 29, 0.4) 0%, rgba(10, 10, 10, 0.9) 100%);
+    background: radial-gradient(circle at center, rgba(16, 2, 29, 0.4) 0%, rgba(10, 10, 10, 0.7) 100%);
   }
 
   .hero-content {
